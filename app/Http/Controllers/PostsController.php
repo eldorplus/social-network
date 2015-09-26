@@ -60,6 +60,16 @@ class PostsController extends Controller
     public function show($id)
     {
         //
+        $post = Post::find($id);
+        if($post){
+            return view('posts.single')->with([
+                'post' => $post
+            ]);
+        }else{
+            return 'post nie isniteje';
+        }
+
+
     }
 
     /**

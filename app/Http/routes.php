@@ -17,7 +17,7 @@ Route::post('/','PostsController@store');
 Route::get('contact','PagesController@contact');
 
 Route::get('user','UsersController@index');
-Route::post('user','UsersController@store');
+Route::get('user/{id}','UsersController@showUser');
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
@@ -28,6 +28,7 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 
+Route::get('post/{id}','PostsController@show');
 
 Route::controllers([
     'password' => 'Auth\PasswordController',

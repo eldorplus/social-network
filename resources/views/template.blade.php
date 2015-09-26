@@ -9,7 +9,7 @@
     <meta name="author" content="Jan Baraniewski">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Laravel 5 project</title>
+    <title>Laravel 5 social network</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/main-template.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->

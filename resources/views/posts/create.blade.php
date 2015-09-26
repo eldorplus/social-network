@@ -6,10 +6,6 @@
     <div class="col-sm-offset-4 col-sm-4">
         {!! Form::open(['url'=>'posts']) !!}
         <div class="form-group">
-            {!! Form::label('title', 'Title :') !!}
-            {!! Form::text('title',null,['class'=>'form-control']) !!}
-        </div>
-        <div class="form-group">
             {!! Form::label('body', 'Body :') !!}
             {!! Form::textarea('body',null,['class'=>'form-control']) !!}
         </div>

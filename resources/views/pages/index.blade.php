@@ -2,8 +2,11 @@
 
 @section('content')
     @if (Auth::check())
-    @include('posts.write')
+        @include('posts.write')
+        @include('posts.all')
+    @else
+        @include('pages.welcome')
     @endif
-    @include('posts.all')
+
 
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Request;
@@ -18,15 +19,30 @@ class UsersController extends Controller
     public function index()
     {
         //
-
+        $posts = Post::where('author_id',Auth::id())->get();
         return view('users.profile')->with([
             'name' => Auth::user()->name,
-            'email' => Auth::user()->email
+            'surname' => Auth::user()->surname,
+            'email' => Auth::user()->email,
+            'posts' => $posts
         ]);
     }
 
-    public function register(){
-        return view('users.register');
+    public function showUser($id){
+        $user = User::find($id);
+        if($user){
+
+            $posts = Post::where('author_id',$id)->get();
+
+            return view('users.profile')->with([
+                'name' => $user->name,
+                'surname' => $user->surname,
+                'email' => $user->email,
+                'posts' => $posts
+            ]);
+        }else{
+            return "nie ma takiego usera";
+        }
     }
 
     /**
@@ -39,24 +55,7 @@ class UsersController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-        $input = Request::all();
-        $model = User::create($input);
-        session(['user_id'=>$model->id]);
-        return view('users.new_profile')->with([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'id' => session('user_id')
-        ]);
-    }
+
 
     /**
      * Display the specified resource.

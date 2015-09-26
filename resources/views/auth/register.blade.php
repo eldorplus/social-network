@@ -29,6 +29,10 @@
                                     {!! Form::text('name',null,['class'=>'form-control']) !!}
                             </div>
                             <div class="form-group">
+                                {!! Form::label('surname', 'Surname :',['class'=>'col-md-4']) !!}
+                                {!! Form::text('surname',null,['class'=>'form-control']) !!}
+                            </div>
+                            <div class="form-group">
                                     {!! Form::label('email', 'Email :',['class'=>'col-md-4']) !!}
                                     {!! Form::email('email',null,['class'=>'form-control']) !!}
                             </div>
