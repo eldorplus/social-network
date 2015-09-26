@@ -1,5 +1,6 @@
 @extends('template')
 
+
 @section('content')
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -14,5 +15,4 @@
             <p><a href="/post/{!! $post->id !!}">{!! $post->created_at !!}</a></p>
         </div>
     </div>
-
 @endsection

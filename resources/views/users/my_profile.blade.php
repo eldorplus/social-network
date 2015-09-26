@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>{!! $name !!} {!! $surname !!}</h1>
-    <button>ok</button>
+    <button>Settings</button>
     <hr/>
     @include('posts.all')
 @stop

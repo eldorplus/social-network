@@ -20,7 +20,7 @@ class UsersController extends Controller
     {
         //
         $posts = Post::where('author_id',Auth::id())->get();
-        return view('users.profile')->with([
+        return view('users.my_profile')->with([
             'name' => Auth::user()->name,
             'surname' => Auth::user()->surname,
             'email' => Auth::user()->email,
@@ -34,7 +34,16 @@ class UsersController extends Controller
 
             $posts = Post::where('author_id',$id)->get();
 
+            if($id==Auth::id()){
+                return view('users.my_profile')->with([
+                    'name' => $user->name,
+                    'surname' => $user->surname,
+                    'email' => $user->email,
+                    'posts' => $posts
+                ]);
+            }
             return view('users.profile')->with([
+                'id'  => $id,
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'email' => $user->email,
