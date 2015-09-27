@@ -6,6 +6,8 @@ namespace App;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -40,23 +42,28 @@ class User extends Model implements AuthenticatableContract,
 
     function friends()
     {
-        return $this->belongsToMany('App\User', 'friends', 'user_id', 'friend_id')
-            ->wherePivot('accepted', '=', 1);
+        return $this->belongsToMany('App\User', 'friends', 'user1_id', 'user2_id');
+    }
+    function friendsOfGiven($id)
+    {
+        $user = User::find($id);
+
+        return $user->belongsToMany('App\User', 'friends', 'user1_id', 'user2_id');
     }
     // friendship that I started
     function friendsOfMine()
     {
-        return $this->belongsToMany('App\User', 'friends', 'user_id', 'friend_id')
-            ->wherePivot('accepted', '=', 1) // to filter only accepted
-            ->withPivot('accepted'); // or to fetch accepted value
+        return $this->belongsToMany('App\User', 'friends', 'user1_id', 'user2_id')
+            ->wherePivot('is_accepted', '=', true) // to filter only is_accepted
+            ->withPivot('is_accepted'); // or to fetch is_accepted value
     }
 
     // friendship that I was invited to
     function friendOf()
     {
-        return $this->belongsToMany('App\User', 'friends', 'friend_id', 'user_id')
-        ->wherePivot('accepted', '=', 1)
-        ->withPivot('accepted');
+        return $this->belongsToMany('App\User', 'friends', 'user2_id', 'user1_id')
+        ->wherePivot('is_accepted', '=', true)
+        ->withPivot('is_accepted');
     }
 
     // accessor allowing you call $user->friends
@@ -87,27 +94,60 @@ class User extends Model implements AuthenticatableContract,
         $user = Auth::user();
         $receiver = User::where('id', $id)->first();
 
-        $result = Friends::where('status',1)->where(function($query) use ($receiver,$user)
+        $result = Friend::where('is_accepted',1)->where(function($query) use ($receiver,$user)
         {
             $query->where([
-                'user_id'   => $user->id,
-                'friend_id' => $receiver->id
+                'user1_id'   => $user->id,
+                'user2_id' => $receiver->id
             ])->orWhere([
-                'user_id'   => $receiver->id,
-                'friend_id' => $user->id
+                'user1_id'   => $receiver->id,
+                'user2_id' => $user->id
             ]);
 
         })->get();
 
         return ! $result->isEmpty();
     }
-    public function addFriend($id)
-    {
-        $this->friends()->attach($id);
-    }
 
+    public function invitationSend($id){
+        $user = Auth::user();
+        $receiver = User::where('id', $id)->first();
+
+        $result = Friend::where('invited_by',$user->id)->where(function($query) use ($receiver,$user)
+        {
+            $query->where([
+                'user1_id'   => $user->id,
+                'user2_id' => $receiver->id
+            ])->orWhere([
+                'user1_id'   => $receiver->id,
+                'user2_id' => $user->id
+            ]);
+
+        })->get();
+
+        return ! $result->isEmpty();
+    }
+    public function invitationReceived($id){
+        $user = Auth::user();
+        $receiver = User::where('id', $id)->first();
+
+        $result = Friend::where('invited_by',$receiver->id)->where(function($query) use ($receiver,$user)
+        {
+            $query->where([
+                'user1_id'   => $user->id,
+                'user2_id' => $receiver->id
+            ])->orWhere([
+                'user1_id'   => $receiver->id,
+                'user2_id' => $user->id
+            ]);
+
+        })->get();
+
+        return ! $result->isEmpty();
+    }
     public function removeFriend($id)
     {
         $this->friends()->detach($id);
     }
+
 }

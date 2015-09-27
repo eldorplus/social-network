@@ -21,7 +21,23 @@ Route::get('user',[
     'uses' => 'UsersController@index'
 ]);
 
-Route::get('user/{id}','UsersController@showUser');
+Route::get('user/{id}',[
+    'middleware' => 'auth',
+    'uses' => 'UsersController@showUser'
+]);
+
+Route::post('user/{id}/invite',[
+    'middleware' => 'auth',
+    'uses' => 'UsersController@getAddFriend'
+]);
+Route::post('user/{id}/remove',[
+    'middleware' => 'auth',
+    'uses' => 'UsersController@getRemoveFriend'
+]);
+Route::post('user/{id}/accept',[
+    'middleware' => 'auth',
+    'uses' => 'UsersController@getConfirmFriend'
+]);
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
@@ -34,8 +50,10 @@ Route::post('auth/register', 'Auth\AuthController@postRegister');
 
 Route::get('post/{id}/edit','PostsController@edit');
 Route::post('post/{id}/edit','PostsController@update');
-Route::get('post/{id}','PostsController@show');
-
+Route::get('post/{id}',[
+    'middleware' => 'auth',
+    'uses' => 'PostsController@show'
+]);
 
 Route::controllers([
     'password' => 'Auth\PasswordController',

@@ -4,3 +4,11 @@ body {
 textarea{
     resize: none;
 }
+.friend-profile-miniature{
+    background-color: aliceblue;
+    height: 100px;
+    position: relative;
+}
+.user-profile-friend-button--sent{
+
+}

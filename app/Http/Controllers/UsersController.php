@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\User;
+use App\Friend;
 use Illuminate\Support\Facades\Auth;
 use Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 class UsersController extends Controller
 {
@@ -50,18 +52,59 @@ class UsersController extends Controller
                 'posts' => $posts
             ]);
         }else{
-            return "nie ma takiego usera";
+            abort(404);
         }
     }
 
     public function getAddFriend($id)
     {
-        Auth::user()->addFriend($id);
+        $user = new Friend;
+        $friend = new Friend;
+
+        $user->user1_id = Auth::id();
+        $user->user2_id = $id;
+        $user->invited_by = Auth::id();
+        $user->touch();
+        $user->save();
+
+        $friend->user2_id = Auth::id();
+        $friend->user1_id = $id;
+        $friend->invited_by = Auth::id();
+        $friend->touch();
+        $friend->save();
         return Redirect::back();
     }
     public function getRemoveFriend($id)
     {
-        Auth::user()->removeFriend($id);
+        $user = Friend::where([
+            'user1_id'=>Auth::id(),
+            'user2_id'=>$id
+        ])->first();
+        Friend::destroy($user->id);
+        $friend = Friend::where([
+            'user2_id'=>Auth::id(),
+            'user1_id'=>$id
+        ])->first();
+        Friend::destroy($friend->id);
         return Redirect::back();
     }
+    public function getConfirmFriend($id)
+    {
+        $user = Friend::where([
+            'user1_id'=>Auth::id(),
+            'user2_id'=>$id
+        ])->first();
+        $handle = Friend::find($user->id);
+        $handle->is_accepted = 1;
+        $handle->save();
+        $friend = Friend::where([
+            'user2_id'=>Auth::id(),
+            'user1_id'=>$id
+        ])->first();
+        $handle =Friend::find($friend->id);
+        $handle->is_accepted = 1;
+        $handle->save();
+        return Redirect::back();
+    }
+
 }
