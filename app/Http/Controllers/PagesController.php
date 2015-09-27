@@ -18,8 +18,7 @@ class PagesController extends Controller
      */
     public function index()
     {
-        $posts = Post::whereIn('author_id',Relation::where('user_1',Auth::id())->get(['user_2']))
-                        ->orWhere('author_id',Auth::id())->orderBy('created_at','DESC')->get();
+        $posts = Post::latest()->get();
         return view('pages.index')->with('posts',$posts);
     }
 

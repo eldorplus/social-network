@@ -16,7 +16,11 @@ Route::get('/','PagesController@index');
 Route::post('/','PostsController@store');
 Route::get('contact','PagesController@contact');
 
-Route::get('user','UsersController@index');
+Route::get('user',[
+    'middleware' => 'auth',
+    'uses' => 'UsersController@index'
+]);
+
 Route::get('user/{id}','UsersController@showUser');
 
 // Authentication routes...
@@ -28,7 +32,10 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 
+Route::get('post/{id}/edit','PostsController@edit');
+Route::post('post/{id}/edit','PostsController@update');
 Route::get('post/{id}','PostsController@show');
+
 
 Route::controllers([
     'password' => 'Auth\PasswordController',

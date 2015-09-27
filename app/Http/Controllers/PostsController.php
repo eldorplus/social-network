@@ -66,7 +66,7 @@ class PostsController extends Controller
                 'post' => $post
             ]);
         }else{
-            return 'post nie isniteje';
+            abort(404);
         }
 
 
@@ -81,6 +81,14 @@ class PostsController extends Controller
     public function edit($id)
     {
         //
+        $post = Post::find($id);
+        if($post){
+            return view('posts.edit')->with([
+                'post' => $post
+            ]);
+        }else{
+            abort(404);
+        }
     }
 
     /**
@@ -93,6 +101,12 @@ class PostsController extends Controller
     public function update(Request $request, $id)
     {
         //
+        //
+        $input = Request::all();
+        $post = Post::find($id);
+        $post->body = $input['body'];
+        $post->save();
+        return redirect('/');
     }
 
     /**

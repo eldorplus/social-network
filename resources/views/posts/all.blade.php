@@ -13,6 +13,12 @@
             </div>
             <div class="panel-footer">
                 <p><a href="/post/{!! $post->id !!}">{!! $post->created_at !!}</a></p>
+                @if($post->created_at!=$post->updated_at)
+                    <p>Updated at: {!! $post->updated_at !!}</p>
+                @endif
+                @can('update-post',$post)
+                    <a href="/post/{!! $post->id !!}/edit">Edit</a>
+                @endcan
             </div>
         </div>
     @endforeach

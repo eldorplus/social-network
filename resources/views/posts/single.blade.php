@@ -13,6 +13,9 @@
         </div>
         <div class="panel-footer">
             <p><a href="/post/{!! $post->id !!}">{!! $post->created_at !!}</a></p>
+            @can('update-post',$post)
+                <a href="#">Edit</a>
+            @endcan
         </div>
     </div>
 @endsection

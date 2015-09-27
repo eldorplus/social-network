@@ -37,4 +37,77 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    function friends()
+    {
+        return $this->belongsToMany('App\User', 'friends', 'user_id', 'friend_id')
+            ->wherePivot('accepted', '=', 1);
+    }
+    // friendship that I started
+    function friendsOfMine()
+    {
+        return $this->belongsToMany('App\User', 'friends', 'user_id', 'friend_id')
+            ->wherePivot('accepted', '=', 1) // to filter only accepted
+            ->withPivot('accepted'); // or to fetch accepted value
+    }
+
+    // friendship that I was invited to
+    function friendOf()
+    {
+        return $this->belongsToMany('App\User', 'friends', 'friend_id', 'user_id')
+        ->wherePivot('accepted', '=', 1)
+        ->withPivot('accepted');
+    }
+
+    // accessor allowing you call $user->friends
+    public function getFriendsAttribute()
+    {
+        if ( ! array_key_exists('friends', $this->relations)) $this->loadFriends();
+
+        return $this->getRelation('friends');
+    }
+
+    protected function loadFriends()
+    {
+        if ( ! array_key_exists('friends', $this->relations))
+        {
+            $friends = $this->mergeFriends();
+
+            $this->setRelation('friends', $friends);
+        }
+    }
+
+    protected function mergeFriends()
+    {
+        return $this->friendsOfMine->merge($this->friendOf);
+    }
+    public function isFriend($id)
+    {
+        // Get both user
+        $user = Auth::user();
+        $receiver = User::where('id', $id)->first();
+
+        $result = Friends::where('status',1)->where(function($query) use ($receiver,$user)
+        {
+            $query->where([
+                'user_id'   => $user->id,
+                'friend_id' => $receiver->id
+            ])->orWhere([
+                'user_id'   => $receiver->id,
+                'friend_id' => $user->id
+            ]);
+
+        })->get();
+
+        return ! $result->isEmpty();
+    }
+    public function addFriend($id)
+    {
+        $this->friends()->attach($id);
+    }
+
+    public function removeFriend($id)
+    {
+        $this->friends()->detach($id);
+    }
 }

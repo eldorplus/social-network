@@ -7,6 +7,4 @@
     @else
         @include('pages.welcome')
     @endif
-
-
 @endsection
