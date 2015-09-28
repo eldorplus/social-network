@@ -9,6 +9,18 @@ textarea{
     height: 100px;
     position: relative;
 }
-.user-profile-friend-button--sent{
+.send-message-form{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-right: 10%;
+    background-color: white;
 
+}
+.main_container{
+    height: 85vh;
+}
+.conversation{
+    height: 75%;
+    overflow:scroll;
 }

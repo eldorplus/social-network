@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\Relation;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -19,6 +20,10 @@ class PagesController extends Controller
     public function index()
     {
         $posts = Post::latest()->get();
+        $user = User::find(Auth::id());
+        
+
+
         return view('pages.index')->with('posts',$posts);
     }
 

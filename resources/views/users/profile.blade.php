@@ -12,8 +12,11 @@
     @else
         @include('users.profile_button.invite')
     @endif
-
+    {!! Form::open(['url'=>'user/'.$id.'/message']) !!}
+    {!! Form::submit("Write message.",['class'=>'col-sm-2 col-xs-8']) !!}
+    {!! Form::close() !!}
     <hr/>
     @include('users.friends')
     @include('posts.all')
+    <script src="/js/random-color-profiles.js"></script>
 @stop

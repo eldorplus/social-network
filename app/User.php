@@ -7,7 +7,6 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -107,6 +106,33 @@ class User extends Model implements AuthenticatableContract,
         })->get();
 
         return ! $result->isEmpty();
+    }
+    public function hasConversation($id)
+    {
+        $user = Auth::user();
+        $receiver = User::where('id', $id)->first();
+
+        $userConversations = ConversationUser::where('user_id','=',$user->id)
+                                                ->get(['conversation_id']);
+
+        $receiverAndUserCommon = ConversationUser::where('user_id',$receiver->id)
+                                                    ->whereIn('conversation_id',$userConversations)
+                                                    ->get(['conversation_id']);
+
+        if(!$receiverAndUserCommon->isEmpty()){
+
+            $otherConversations = ConversationUser::whereNotIn('user_id',array($user->id,$receiver->id))
+                                                        ->get(['conversation_id']);
+
+            $privateConversation = ConversationUser::whereIn('conversation_id',$receiverAndUserCommon)
+                                                        ->whereNotIn('conversation_id',$otherConversations)
+                                                        ->first();
+            if($privateConversation){
+                return $privateConversation;
+            }
+            return false;
+        }
+        return false;
     }
 
     public function invitationSend($id){

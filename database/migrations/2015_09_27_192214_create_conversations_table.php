@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRelationsTable extends Migration
+class CreateConversationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateRelationsTable extends Migration
     public function up()
     {
         //
-        Schema::create('relations',function(Blueprint $table){
+        Schema::create('conversations',function(Blueprint $table){
             $table->increments('id');
-            $table->integer('user_1')->unsigned();
-            $table->foreign('user_1')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('user_2')->unsigned();
-            $table->foreign('user_2')->references('id')->on('users')->onDelete('cascade');
+            $table->string('title')->default("");
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateRelationsTable extends Migration
     public function down()
     {
         //
-        Schema::drop('relations');
+        Schema::drop('conversations');
     }
 }

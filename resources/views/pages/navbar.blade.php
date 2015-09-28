@@ -12,6 +12,10 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
+                @if(Auth::check())
+                    <li><a href='/messages'>Messages</a></li>
+                @endif
+
                 <li><a href="/contact">Contact</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">

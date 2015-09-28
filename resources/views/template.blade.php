@@ -22,8 +22,9 @@
     @include('pages.navbar')
 
 
-    <div class="container">
+    <div class="container main_container">
         @yield('content')
+        @yield('send_message')
     </div>
 
 
@@ -33,5 +34,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/users-profile-buttons.js"></script>
+    <script src="/js/conversation-scrolled-bottom.js"></script>
 </body>
 </html>

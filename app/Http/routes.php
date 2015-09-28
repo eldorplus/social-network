@@ -16,6 +16,24 @@ Route::get('/','PagesController@index');
 Route::post('/','PostsController@store');
 Route::get('contact','PagesController@contact');
 
+Route::get('messages',[
+    'middleware' => 'auth',
+    'uses' => 'ConversationsController@index'
+]);
+
+Route::get('messages/{id}',[
+    'middleware' => 'auth',
+    'uses' => 'ConversationsController@getConversation'
+]);
+Route::post('messages/{id}',[
+    'middleware' => 'auth',
+    'uses' => 'MessagesController@store'
+]);
+Route::get('messages/{id}/debug',[
+    'middleware' => 'auth',
+    'uses' => 'ConversationsController@getUsersString'
+]);
+
 Route::get('user',[
     'middleware' => 'auth',
     'uses' => 'UsersController@index'
@@ -37,6 +55,10 @@ Route::post('user/{id}/remove',[
 Route::post('user/{id}/accept',[
     'middleware' => 'auth',
     'uses' => 'UsersController@getConfirmFriend'
+]);
+Route::post('user/{id}/message',[
+    'middleware' => 'auth',
+    'uses' => 'MessagesController@createPrivate'
 ]);
 
 // Authentication routes...
