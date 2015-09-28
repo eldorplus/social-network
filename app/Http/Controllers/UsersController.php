@@ -22,11 +22,19 @@ class UsersController extends Controller
     {
         //
         $posts = Post::where('author_id',Auth::id())->get();
+        $user = User::find(Auth::id());
+        $unreadNotifications = $user->notifications()->unread()->get()->count();
+        $notifications = $user->notifications()->get();
+
         return view('users.my_profile')->with([
-            'name' => Auth::user()->name,
-            'surname' => Auth::user()->surname,
-            'email' => Auth::user()->email,
-            'posts' => $posts
+            'name'                  => Auth::user()->name,
+            'surname'               => Auth::user()->surname,
+            'email'                 => Auth::user()->email,
+            'posts'                 => $posts,
+            'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+            'notifications'      => $user->notifications()->not_type('message')->get(),
+            'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
+            'messagesNotifications' => $user->notifications()->type('message')->get()
         ]);
     }
 
@@ -36,20 +44,31 @@ class UsersController extends Controller
 
             $posts = Post::where('author_id',$id)->get();
 
+            $unreadNotifications = $user->notifications()->unread()->get()->count();
+            $notifications = $user->notifications()->get();
+
             if($id==Auth::id()){
                 return view('users.my_profile')->with([
-                    'name' => $user->name,
-                    'surname' => $user->surname,
-                    'email' => $user->email,
-                    'posts' => $posts
+                    'name'                  => $user->name,
+                    'surname'               => $user->surname,
+                    'email'                 => $user->email,
+                    'posts'                 => $posts,
+                    'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+                    'notifications'      => $user->notifications()->not_type('message')->get(),
+                    'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
+                    'messagesNotifications' => $user->notifications()->type('message')->get()
                 ]);
             }
             return view('users.profile')->with([
-                'id'  => $id,
-                'name' => $user->name,
-                'surname' => $user->surname,
-                'email' => $user->email,
-                'posts' => $posts
+                'id'                    => $id,
+                'name'                  => $user->name,
+                'surname'               => $user->surname,
+                'email'                 => $user->email,
+                'posts'                 => $posts,
+                'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+                'notifications'      => $user->notifications()->not_type('message')->get(),
+                'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
+                'messagesNotifications' => $user->notifications()->type('message')->get()
             ]);
         }else{
             abort(404);
@@ -72,6 +91,14 @@ class UsersController extends Controller
         $friend->invited_by = Auth::id();
         $friend->touch();
         $friend->save();
+
+        $user = User::find($id);
+        $user->newNotification()
+            ->withType('friend_invite')
+            ->withSubject($user->name.' '.$user->surname.' invited you!')
+            ->withBody('Go to her/his profile')
+            ->regarding($user)
+            ->deliver();
         return Redirect::back();
     }
     public function getRemoveFriend($id)

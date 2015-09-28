@@ -61,10 +61,15 @@ Route::post('user/{id}/message',[
     'uses' => 'MessagesController@createPrivate'
 ]);
 
+Route::get('notifications/{id}/received',[
+    'middleware' => 'auth',
+    'uses' => 'NotificationsController@received'
+]);
+
 // Authentication routes...
-Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
+Route::get('/auth/login', 'Auth\AuthController@getLogin');
+Route::post('/auth/login', 'Auth\AuthController@postLogin');
+Route::get('/auth/logout', 'Auth\AuthController@getLogout');
 
 // Registration routes...
 Route::get('auth/register', 'Auth\AuthController@getRegister');
@@ -75,6 +80,11 @@ Route::post('post/{id}/edit','PostsController@update');
 Route::get('post/{id}',[
     'middleware' => 'auth',
     'uses' => 'PostsController@show'
+]);
+Route::get('post/{id}/destroy',[
+    'middleware' => 'auth',
+    'uses' => 'PostsController@destroy',
+    'method' => 'delete'
 ]);
 
 Route::controllers([

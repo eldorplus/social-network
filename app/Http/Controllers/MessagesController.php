@@ -6,7 +6,9 @@ use Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Message;
+use App\User;
 use App\Conversation;
+use App\ConversationUser;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -29,7 +31,7 @@ class MessagesController extends Controller
     public function createPrivate($id){
         $handle = Auth::user()->hasConversation($id);
         if($handle){
-            print_r($handle);
+            return redirect('/messages/'.$handle->conversation_id);
         }else{
             $privateConversationId = ConversationsController::createPrivateConversation(Auth::id(),$id);
             return redirect('/messages/'.$privateConversationId);
@@ -47,6 +49,19 @@ class MessagesController extends Controller
         $input['author_id']=Auth::id();
         $input['conversation_id']=$id;
         Message::create($input);
+
+        $to_users = ConversationUser::where('conversation_id',$id)->where('user_id','!=',Auth::id())->get(['user_id']);
+
+        foreach($to_users as $_user){
+            $user = User::find($_user->user_id);
+            $user->newNotification()
+                ->withType('message')
+                ->withSubject($conversation->title)
+                ->withBody($input['body'])
+                ->regarding($conversation)
+                ->deliver();
+        }
+
         return redirect('/messages/'.$id);
     }
 

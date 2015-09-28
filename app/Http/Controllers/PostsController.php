@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Request;
 use App\Http\Requests;
 use App\Post;
+use App\Friend;
 use App\Http\Controllers\Controller;
 
 class PostsController extends Controller
@@ -21,7 +22,13 @@ class PostsController extends Controller
         //
 
         $posts = Post::latest()->get();
-        return view('posts.all')->with('posts',$posts);
+        return view('posts.all')->with([
+            'posts'=>$posts,
+            'new_notifications_count'      => Auth::user()->notifications()->unread()->get()->count(),
+            'notifications'      => Auth::user()->notifications()->not_type('message')->get(),
+            'new_messagesNotifications_count' => Auth::user()->notifications()->unread()->type('message')->get()->count(),
+            'messagesNotifications' => Auth::user()->notifications()->type('message')->get()
+        ]);
     }
 
     /**
@@ -118,5 +125,15 @@ class PostsController extends Controller
     public function destroy($id)
     {
         //
+        $post = Post::find($id);
+        $post->delete();
+        return redirect('/');
+    }
+
+    public static function getFriendsAndUsersPosts(){
+        $friends = Friend::where('user1_id',Auth::id())->where('is_accepted',1)->get(['user2_id']);
+        $friends->push(['user2_id'=>Auth::id()]);
+        $posts = Post::whereIn('author_id',$friends)->get();
+        return $posts;
     }
 }

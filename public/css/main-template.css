@@ -24,3 +24,9 @@ textarea{
     height: 75%;
     overflow:scroll;
 }
+.notifications-dropdown{
+    min-width: 250px;
+    max-height:300px;/*The important part*/
+    overflow-y:auto;/*Also...*/
+    overflow-x:hidden;/*And the end of the important part*/
+}

@@ -26,6 +26,7 @@ class ConversationsController extends Controller
                 $result = $result.$user->name." ".$user->surname.", ";
             }
         }
+
         return  rtrim($result, ", ");;
     }
 
@@ -64,8 +65,16 @@ class ConversationsController extends Controller
 
         }
 
+            $user = User::find(Auth::id());
+            $unreadNotifications = $user->notifications()->unread()->get()->count();
+            $notifications = $user->notifications()->get();
+
             return view('conversations.conversations')->with([
-                "conversations" => $conversations
+                "conversations" => $conversations,
+                'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+                'notifications'      => $user->notifications()->not_type('message')->get(),
+                'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
+                'messagesNotifications' => $user->notifications()->type('message')->get()
             ]);
 
     }
@@ -94,10 +103,20 @@ class ConversationsController extends Controller
         }else{
             $conversation_name = $_conversation->name;
         }
+
+
+        $user = User::find(Auth::id());
+        $unreadNotifications = $user->notifications()->unread()->get()->count();
+        $notifications = $user->notifications()->get();
+
         return view('conversations.conversation')->with([
             'messages'              => $messages,
             'conversation_name'     => $conversation_name,
-            'id'                    => $id
+            'id'                    => $id,
+            'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+            'notifications'      => $user->notifications()->not_type('message')->get(),
+            'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
+            'messagesNotifications' => $user->notifications()->type('message')->get()
         ]);
     }
 

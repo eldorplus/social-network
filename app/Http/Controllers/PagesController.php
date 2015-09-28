@@ -19,15 +19,34 @@ class PagesController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->get();
-        $user = User::find(Auth::id());
-        
+        $posts = PostsController::getFriendsAndUsersPosts();
+        if(Auth::check()){
 
 
-        return view('pages.index')->with('posts',$posts);
+            $user = User::find(Auth::id());
+            return view('pages.index')->with([
+                'posts'               => $posts,
+                'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+                'notifications'      => $user->notifications()->not_type('message')->get(),
+                'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
+                'messagesNotifications' => $user->notifications()->type('message')->get()
+            ]);
+        }
+        return view('pages.index');
     }
 
     public function contact(){
+        if(Auth::check()){
+            $user = User::find(Auth::id());
+            $unreadNotifications = $user->notifications()->unread()->get()->count();
+            $notifications = $user->notifications()->get();
+            return view('pages.contact')->with([
+                'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+                'notifications'      => $user->notifications()->not_type('message')->get(),
+                'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
+                'messagesNotifications' => $user->notifications()->type('message')->get()
+            ]);
+        }
         return view('pages.contact');
     }
 

@@ -18,7 +18,9 @@
                 @endif
                 @can('update-post',$post)
                     <a href="/post/{!! $post->id !!}/edit">Edit</a>
+                    <a href="/post/{!! $post->id !!}/destroy">Remove</a>
                 @endcan
+
             </div>
         </div>
     @endforeach

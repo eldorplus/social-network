@@ -96,11 +96,11 @@ class User extends Model implements AuthenticatableContract,
         $result = Friend::where('is_accepted',1)->where(function($query) use ($receiver,$user)
         {
             $query->where([
-                'user1_id'   => $user->id,
-                'user2_id' => $receiver->id
+                'user1_id'      => $user->id,
+                'user2_id'      => $receiver->id
             ])->orWhere([
-                'user1_id'   => $receiver->id,
-                'user2_id' => $user->id
+                'user1_id'      => $receiver->id,
+                'user2_id'      => $user->id
             ]);
 
         })->get();
@@ -175,5 +175,21 @@ class User extends Model implements AuthenticatableContract,
     {
         $this->friends()->detach($id);
     }
+
+
+    public function notifications()
+    {
+        return $this->hasMany('App\Notification');
+    }
+
+    public function newNotification()
+    {
+        $notification = new Notification;
+        $notification->user()->associate($this);
+
+        return $notification;
+    }
+
+
 
 }
