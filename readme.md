@@ -1,1 +1,2 @@
-#larabel5.1_social_network
+#Social Network Application using Laravel 5.1
+
