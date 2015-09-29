@@ -16,6 +16,8 @@
             @endforeach
         </div>
     </div>
+
+        <script src="/js/conversation-scrolled-bottom.js"></script>
 @endsection
 @section('send_message')
     <div class="send-message-form">

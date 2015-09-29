@@ -31,5 +31,10 @@ textarea{
     overflow-x:hidden;
 }
 .panel-heading,.panel-footer{
-    height: 55px;
+    height: 35px;
+    padding-top: 0;
+    padding-right: 0;
+}
+.notification-unread{
+    background-color: rgba(0,0,0,0.3)
 }

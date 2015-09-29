@@ -40,7 +40,7 @@ class UsersController extends Controller
 
     public function showUser($id){
         $user = User::find($id);
-        if($user){
+        if(!empty($user)){
 
             $posts = Post::where('author_id',$id)->get();
 
@@ -71,7 +71,7 @@ class UsersController extends Controller
                 'messagesNotifications' => $user->notifications()->type('message')->get()
             ]);
         }else{
-            abort(404);
+            print_r($user);
         }
     }
 

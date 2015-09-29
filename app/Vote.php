@@ -2,42 +2,25 @@
 
 namespace App;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+class Vote extends Model
 {
     //
-    protected $table = 'notifications';
-    protected $fillable = ['user_id','type','subject','body','object_id','object_type','is_read','send_at'];
+    protected $table = 'votes';
+    protected $fillable = ['user_id','type','object_id','object_type'];
     private $relatedObject = null;
 
     public function getDates()
     {
-        return ['created_at', 'updated_at', 'sent_at'];
+        return ['created_at', 'updated_at'];
     }
 
-    public function user()
+    public function post()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Post');
     }
 
-    public function withSubject($subject)
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
-
-    public function withBody($body)
-    {
-        $this->body = $body;
-
-        return $this;
-    }
-    public function isRead(){
-        return $this->is_read;
-    }
     public function withType($type)
     {
         $this->type = $type;
@@ -55,28 +38,15 @@ class Notification extends Model
 
         return $this;
     }
-
     public function deliver()
     {
-        $this->sent_at = new Carbon;
         $this->save();
 
         return $this;
     }
-    public function scopeUnread($query)
-    {
-        return $query->where('is_read', '=', 0);
-    }
     public function scopeType($query, $type)
     {
         return $query->where('type', '=', $type);
-    }
-    public function scopeNot_type($query,$type){
-        return $query->where('type', '!=', $type);
-    }
-    public function scopeInvitation($query)
-    {
-        return $query->where('type', '=', 'friend_invite');
     }
 
     public function hasValidObject()

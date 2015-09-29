@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Request;
 use App\Http\Requests;
 use App\Post;
+use App\User;
 use App\Friend;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 
 class PostsController extends Controller
 {
@@ -70,7 +72,11 @@ class PostsController extends Controller
         $post = Post::find($id);
         if($post){
             return view('posts.single')->with([
-                'post' => $post
+                'post' => $post,
+                'new_notifications_count'      => Auth::user()->notifications()->unread()->not_type('message')->get()->count(),
+                'notifications'      => Auth::user()->notifications()->not_type('message')->get(),
+                'new_messagesNotifications_count' => Auth::user()->notifications()->unread()->type('message')->get()->count(),
+                'messagesNotifications' => Auth::user()->notifications()->type('message')->get()
             ]);
         }else{
             abort(404);
@@ -116,6 +122,40 @@ class PostsController extends Controller
         return redirect('/');
     }
 
+    public function upvote($id){
+        if ( Request::ajax() ){
+            $post = Post::find($id);
+            $post->newVote()
+                ->withType('upvote')
+                ->regarding(Auth::user())
+                ->deliver();
+            $user = Auth::user();
+            $post_author = User::find($post->author_id);
+            $post_author->newNotification()
+                ->withType('post')
+                ->withSubject($user->name.' '.$user->surname.' upvoted your post.')
+                ->withBody('"'.$post->body.'"')
+                ->regarding($post)
+                ->deliver();
+        }
+    }
+    public function downvote($id){
+        if ( Request::ajax() ){
+            $post = Post::find($id);
+            $post->newVote()
+                ->withType('downvote')
+                ->regarding(Auth::user())
+                ->deliver();
+            $user = Auth::user();
+            $post_author = User::find($post->author_id);
+            $post_author->newNotification()
+                ->withType('post')
+                ->withSubject($user->name.' '.$user->surname.' downvoted your post.')
+                ->withBody('"'.$post->body.'"')
+                ->regarding($post)
+                ->deliver();
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *

@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_token" content="{!! csrf_token() !!}"/>
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="Sample Laravel 5 Project">
     <meta name="author" content="Jan Baraniewski">
@@ -24,6 +25,7 @@
 
 
     <div class="container main_container">
+        <div id="idMyModal"></div>
         @yield('content')
         @yield('send_message')
     </div>
@@ -34,6 +36,10 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/users-profile-buttons.js"></script>
-    <script src="/js/conversation-scrolled-bottom.js"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+        });
+    </script>
 </body>
 </html>

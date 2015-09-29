@@ -15,14 +15,14 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Messages <span class="badge">
-                                {!! $new_messagesNotifications_count !!}
+                                {!! App\User::find(Auth::id())->notifications()->unread()->type('message')->count() or ''!!}
                             </span>
                         </a>
                         <ul class="dropdown-menu notifications-dropdown">
-                            @foreach($messagesNotifications->reverse() as $notification)
+                            @foreach(Auth::user()->notifications()->type('message')->get()->reverse() as $notification)
                                 <li>
-                                    <div class="notification {{ $notification->type }}">
-                                        <p class="subject">{{ $notification->subject }}</p>
+                                    <div class="notification {{ $notification->type }} @if(!$notification->isRead()) notification-unread @endif">
+                                        <p class="subject">{!!  App\Conversation::find($notification->getObject()->id)->title !!}</p>
                                         <p class="body">{{ $notification->body }}</p>
 
                                         @if($notification->hasValidObject())
@@ -31,24 +31,25 @@
                                     </div>
                                 </li>
                             @endforeach
+
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Notifications <span class="badge">
-                                {!! $new_notifications_count !!}
+                              {!! App\User::find(Auth::id())->notifications()->unread()->count() > 0 ? App\User::find(Auth::id())->notifications()->unread()->count()  : ''!!}
                             </span>
                         </a>
                         <ul class="dropdown-menu notifications-dropdown">
-                            @foreach($notifications->reverse() as $notification)
-                               <li>
-                                <div class="notification {{ $notification->type }}">
+
+                            @foreach(Auth::user()->notifications()->not_type('message')->get()->reverse() as $notification)
+                                <li>
+                                <div class="notification {{ $notification->type }} @if(!$notification->isRead()) notification-unread @endif">
                                 <p class="subject">{{ $notification->subject }}</p>
                                 <p class="body">{{ $notification->body }}</p>
-
-                                @if($notification->hasValidObject())
-                                <a href="/messages/{{ $notification->getObject()->id }}">View</a>
-                                @endif
+                                    @if($notification->hasValidObject())
+                                        <a href="/notifications/{{ $notification->id }}/received">View</a>
+                                    @endif
                                 </div>
                                </li>
                             @endforeach

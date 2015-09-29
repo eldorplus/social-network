@@ -38,12 +38,10 @@ Route::get('user',[
     'middleware' => 'auth',
     'uses' => 'UsersController@index'
 ]);
-
 Route::get('user/{id}',[
     'middleware' => 'auth',
     'uses' => 'UsersController@showUser'
 ]);
-
 Route::post('user/{id}/invite',[
     'middleware' => 'auth',
     'uses' => 'UsersController@getAddFriend'
@@ -86,7 +84,14 @@ Route::get('post/{id}/destroy',[
     'uses' => 'PostsController@destroy',
     'method' => 'delete'
 ]);
-
+Route::post('/post/{id}/upvote',[
+    'middleware' => 'auth',
+    'uses'       => 'PostsController@upvote'
+]);
+Route::post('/post/{id}/downvote',[
+    'middleware' => 'auth',
+    'uses'       => 'PostsController@downvote'
+]);
 Route::controllers([
     'password' => 'Auth\PasswordController',
 ]);

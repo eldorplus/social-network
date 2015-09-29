@@ -34,6 +34,7 @@ class MessagesController extends Controller
             return redirect('/messages/'.$handle->conversation_id);
         }else{
             $privateConversationId = ConversationsController::createPrivateConversation(Auth::id(),$id);
+            Conversation::find($privateConversationId)->title = ConversationsController::getUsersString($privateConversationId);
             return redirect('/messages/'.$privateConversationId);
         }
     }

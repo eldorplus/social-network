@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 class ConversationsController extends Controller
 {
 
-    public function getUsersString($id){
+    public static function getUsersString($id){
         $result = "";
         $_users = ConversationUser::where([
             'conversation_id'=>$id
@@ -47,6 +47,7 @@ class ConversationsController extends Controller
 
             if($_conversation->title===""){
                 $_conversation->title = ConversationsController::getUsersString($_conversation->id);
+                $_conversation->save();
             }
 
             $lastMessage = Message::where(['conversation_id'  =>$_conversation->id])->orderBy('updated_at', 'desc')->first();
@@ -98,10 +99,11 @@ class ConversationsController extends Controller
             $messages->push($message);
         }
         $conversation_name = "";
-        if($_conversation->name==""){
+        if($_conversation->title==""){
             $conversation_name =ConversationsController::getUsersString($id);
+            $_conversation->save();
         }else{
-            $conversation_name = $_conversation->name;
+            $conversation_name = $_conversation->title;
         }
 
 
@@ -130,6 +132,7 @@ class ConversationsController extends Controller
         //
         $newPrivateConversation = new Conversation;
         $newPrivateConversation->touch();
+
         $newPrivateConversation->save();
 
         $user1relation = new ConversationUser;
@@ -143,6 +146,8 @@ class ConversationsController extends Controller
         $user2relation->user_id = $user2;
         $user2relation->touch();
         $user2relation->save();
+
+
 
         return $newPrivateConversation->id;
     }

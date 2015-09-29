@@ -2,5 +2,6 @@
 
 
 @section('content')
-    @include('posts.post_template)
+    @include('posts.post_template')
+    <script src="/js/vote-button-click.js"></script>
 @endsection

@@ -19,8 +19,10 @@ class NotificationsController extends Controller
                 return redirect('/messages/'.$handle->getObject()->id);
                 break;
             case 'friend_invite':
-                return redirect('/users/'.$handle->getObject()->id);
+                return redirect(url('/user/'.$handle->getObject()->id));
                 break;
+            case 'post':
+                return redirect('/post/'.$handle->getObject()->id);
             default:
                 print_r($handle->type);
                 break;
