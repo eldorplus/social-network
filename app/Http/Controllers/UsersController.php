@@ -31,7 +31,7 @@ class UsersController extends Controller
             'surname'               => Auth::user()->surname,
             'email'                 => Auth::user()->email,
             'posts'                 => $posts,
-            'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+            'new_notifications_count'      => $user->notifications()->unread()->not_type('message')->get()->count(),
             'notifications'      => $user->notifications()->not_type('message')->get(),
             'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
             'messagesNotifications' => $user->notifications()->type('message')->get()
@@ -53,7 +53,7 @@ class UsersController extends Controller
                     'surname'               => $user->surname,
                     'email'                 => $user->email,
                     'posts'                 => $posts,
-                    'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+                    'new_notifications_count'      => $user->notifications()->unread()->not_type('message')->get()->count(),
                     'notifications'      => $user->notifications()->not_type('message')->get(),
                     'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
                     'messagesNotifications' => $user->notifications()->type('message')->get()
@@ -65,7 +65,7 @@ class UsersController extends Controller
                 'surname'               => $user->surname,
                 'email'                 => $user->email,
                 'posts'                 => $posts,
-                'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+                'new_notifications_count'      => $user->notifications()->unread()->not_type('message')->get()->count(),
                 'notifications'      => $user->notifications()->not_type('message')->get(),
                 'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
                 'messagesNotifications' => $user->notifications()->type('message')->get()

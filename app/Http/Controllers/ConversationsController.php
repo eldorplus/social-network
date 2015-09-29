@@ -71,7 +71,7 @@ class ConversationsController extends Controller
 
             return view('conversations.conversations')->with([
                 "conversations" => $conversations,
-                'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+                'new_notifications_count'      => $user->notifications()->unread()->not_type('message')->get()->count(),
                 'notifications'      => $user->notifications()->not_type('message')->get(),
                 'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
                 'messagesNotifications' => $user->notifications()->type('message')->get()
@@ -113,7 +113,7 @@ class ConversationsController extends Controller
             'messages'              => $messages,
             'conversation_name'     => $conversation_name,
             'id'                    => $id,
-            'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+            'new_notifications_count'      => $user->notifications()->unread()->not_type('message')->get()->count(),
             'notifications'      => $user->notifications()->not_type('message')->get(),
             'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
             'messagesNotifications' => $user->notifications()->type('message')->get()

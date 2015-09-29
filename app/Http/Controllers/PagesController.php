@@ -26,7 +26,7 @@ class PagesController extends Controller
             $user = User::find(Auth::id());
             return view('pages.index')->with([
                 'posts'               => $posts,
-                'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+                'new_notifications_count'      => $user->notifications()->unread()->not_type('message')->get()->count(),
                 'notifications'      => $user->notifications()->not_type('message')->get(),
                 'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
                 'messagesNotifications' => $user->notifications()->type('message')->get()
@@ -41,7 +41,7 @@ class PagesController extends Controller
             $unreadNotifications = $user->notifications()->unread()->get()->count();
             $notifications = $user->notifications()->get();
             return view('pages.contact')->with([
-                'new_notifications_count'      => $user->notifications()->unread()->get()->count(),
+                'new_notifications_count'      => $user->notifications()->unread()->not_type('message')->get()->count(),
                 'notifications'      => $user->notifications()->not_type('message')->get(),
                 'new_messagesNotifications_count' => $user->notifications()->unread()->type('message')->get()->count(),
                 'messagesNotifications' => $user->notifications()->type('message')->get()

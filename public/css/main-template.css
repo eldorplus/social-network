@@ -26,7 +26,10 @@ textarea{
 }
 .notifications-dropdown{
     min-width: 250px;
-    max-height:300px;/*The important part*/
-    overflow-y:auto;/*Also...*/
-    overflow-x:hidden;/*And the end of the important part*/
+    max-height:300px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+.panel-heading,.panel-footer{
+    height: 55px;
 }

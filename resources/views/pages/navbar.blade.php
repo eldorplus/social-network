@@ -19,7 +19,7 @@
                             </span>
                         </a>
                         <ul class="dropdown-menu notifications-dropdown">
-                            @foreach($messagesNotifications as $notification)
+                            @foreach($messagesNotifications->reverse() as $notification)
                                 <li>
                                     <div class="notification {{ $notification->type }}">
                                         <p class="subject">{{ $notification->subject }}</p>
@@ -40,7 +40,7 @@
                             </span>
                         </a>
                         <ul class="dropdown-menu notifications-dropdown">
-                            @foreach($notifications as $notification)
+                            @foreach($notifications->reverse() as $notification)
                                <li>
                                 <div class="notification {{ $notification->type }}">
                                 <p class="subject">{{ $notification->subject }}</p>
@@ -52,6 +52,7 @@
                                 </div>
                                </li>
                             @endforeach
+
                         </ul>
                     </li>
                 @endif
