@@ -79,10 +79,9 @@ Route::get('post/{id}',[
     'middleware' => 'auth',
     'uses' => 'PostsController@show'
 ]);
-Route::get('post/{id}/destroy',[
+Route::post('post/{id}/destroy',[
     'middleware' => 'auth',
     'uses' => 'PostsController@destroy',
-    'method' => 'delete'
 ]);
 Route::post('/post/{id}/upvote',[
     'middleware' => 'auth',

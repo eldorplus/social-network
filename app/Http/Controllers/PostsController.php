@@ -126,9 +126,20 @@ class PostsController extends Controller
     public function upvote($id){
         if ( Request::ajax() ){
             $post = Post::find($id);
-            $_downvote_handle = Vote::where('object_id','=',Auth::id())->where('type','=','downvote')->where('post_id','=',$id)->first();
+            $_downvote_handle = Vote::where('object_id','=',Auth::id())
+                                        ->where('type','=','downvote')
+                                        ->where('post_id','=',$id)
+                                        ->first();
             if($_downvote_handle){
                 $_downvote_handle->delete();
+
+                //TODO: add in notifications table column 'sender_id' to track down user responsible for notification
+                //TODO: delete previous notification from sender regarding current post upvote/downvote
+
+//                $_notification_handle = Notification::where('type','=','post')
+//                                                        ->where('object_id','=',$id)
+//                                                        ->where('user_id','=',$post->author_id)
+//                                                        ->first();
             }
             $post->newVote()
                 ->withType('upvote')
@@ -183,9 +194,10 @@ class PostsController extends Controller
     public function destroy($id)
     {
         //
-        $post = Post::find($id);
-        $post->delete();
-        return redirect('/');
+        if ( Request::ajax() ){
+            $post = Post::find($id);
+            $post->delete();
+        }
     }
 
     public static function getFriendsAndUsersPosts(){

@@ -25,7 +25,7 @@
 
 
     <div class="container main_container">
-        <div id="idMyModal"></div>
+        @include('pages.alertModal')
         @yield('content')
         @yield('send_message')
     </div>
