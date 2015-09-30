@@ -20,18 +20,14 @@
             Updated at: {!! $post->updated_at !!}
         @endif
         <div class="btn-group" role="group" aria-label="..." style="float: right;">
-            <button type="button" class="btn btn-default target-button vote-button" data-token="{!! csrf_token() !!}" data-method="POST"       data-target="/post/{!! $post->id !!}/upvote" @if($post->author_id==Auth::id()) disabled @endif>
+            <button id="{!! $post->id !!}-upvote" type="button" class="btn btn-default target-button vote-button upvote" data-token="{!! csrf_token() !!}" data-type="upvote"           data-identification='{!! $post->id !!}' data-target="/post/{!! $post->id !!}/upvote" @if($post->author_id==Auth::id() || $post->votes()->type('upvote')->voted()->get()->count()>0) disabled="disabled" @endif>
                 <span class="glyphicon glyphicon-arrow-up">
-                    @if($post->votes()->type('upvote')->get()->count()>0)
                         {!! $post->votes()->type('upvote')->get()->count() !!}
-                    @endif
                 </span>
             </button>
-            <button type="button" class="btn btn-default target-button vote-button" data-token="{!! csrf_token() !!}" data-method="DELETE"     data-target="{!! url('/post/'.$post->id.'/downvote') !!}" @if($post->author_id==Auth::id()) disabled @endif>
+            <button id="{!! $post->id !!}-downvote" type="button" class="btn btn-default target-button vote-button downvote" data-token="{!! csrf_token() !!}" data-type="downvote"     data-identification='{!! $post->id !!}' data-target="{!! url('/post/'.$post->id.'/downvote') !!}" @if($post->author_id==Auth::id() || $post->votes()->type('downvote')->voted()->get()->count()>0) disabled="disabled" @endif>
                 <span class="glyphicon glyphicon-arrow-down">
-                    @if($post->votes()->type('downvote')->get()->count()>0)
                        {!!$post->votes()->type('downvote')->get()->count() !!}
-                    @endif
                 </span>
             </button>
         </div>

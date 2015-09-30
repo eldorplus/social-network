@@ -38,3 +38,9 @@ textarea{
 .notification-unread{
     background-color: rgba(0,0,0,0.3)
 }
+.upvote{
+    background-color: mediumspringgreen !important;
+}
+.downvote{
+    background-color: indianred !important;
+}

@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\Post;
 use App\User;
 use App\Friend;
+use App\Vote;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 
@@ -125,6 +126,10 @@ class PostsController extends Controller
     public function upvote($id){
         if ( Request::ajax() ){
             $post = Post::find($id);
+            $_downvote_handle = Vote::where('object_id','=',Auth::id())->where('type','=','downvote')->where('post_id','=',$id)->first();
+            if($_downvote_handle){
+                $_downvote_handle->delete();
+            }
             $post->newVote()
                 ->withType('upvote')
                 ->regarding(Auth::user())
@@ -137,11 +142,20 @@ class PostsController extends Controller
                 ->withBody('"'.$post->body.'"')
                 ->regarding($post)
                 ->deliver();
+
+            return array(
+                'data1' => $post->votes()->type('upvote')->get()->count(),
+                'data2' => $post->votes()->type('downvote')->get()->count()
+            );
         }
     }
     public function downvote($id){
         if ( Request::ajax() ){
             $post = Post::find($id);
+            $_upvote_handle = Vote::where('object_id','=',Auth::id())->where('type','=','upvote')->where('post_id','=',$id)->first();
+            if($_upvote_handle){
+                $_upvote_handle->delete();
+            }
             $post->newVote()
                 ->withType('downvote')
                 ->regarding(Auth::user())
@@ -154,6 +168,10 @@ class PostsController extends Controller
                 ->withBody('"'.$post->body.'"')
                 ->regarding($post)
                 ->deliver();
+            return array(
+                'data1' => $post->votes()->type('downvote')->get()->count(),
+                'data2' => $post->votes()->type('upvote')->get()->count()
+            );
         }
     }
     /**

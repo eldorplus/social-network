@@ -3,12 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Vote extends Model
 {
     //
     protected $table = 'votes';
-    protected $fillable = ['user_id','type','object_id','object_type'];
+    protected $fillable = ['post_id','type','object_id','object_type'];
     private $relatedObject = null;
 
     public function getDates()
@@ -48,7 +49,9 @@ class Vote extends Model
     {
         return $query->where('type', '=', $type);
     }
-
+    public function scopeVoted($query){
+        return $query->where('object_id','=',Auth::id());
+    }
     public function hasValidObject()
     {
         try
