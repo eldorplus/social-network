@@ -5,4 +5,5 @@
         @include('posts.post_template')
 
         <script src="/js/vote-button-click.js"></script>
+        <script src="/js/comments.js"></script>
     @endforeach

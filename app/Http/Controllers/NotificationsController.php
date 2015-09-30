@@ -23,6 +23,9 @@ class NotificationsController extends Controller
                 break;
             case 'post':
                 return redirect('/post/'.$handle->getObject()->id);
+                break;
+            case 'comment':
+                return redirect('/post/'.$handle->getObject()->id);
             default:
                 print_r($handle->type);
                 break;

@@ -8,6 +8,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         From: <a href="/user/{!! $message['author_id'] !!}">{!! $message['author_name'] !!} {!! $message['author_surname'] !!}</a>
+                        <div style="float: right">
+                            {!! $message['timestamp'] !!}
+                        </div>
                     </div>
                     <div class="panel-body">
                         {!! $message['body'] !!}
@@ -17,10 +20,14 @@
         </div>
     </div>
 
-        <script src="/js/conversation-scrolled-bottom.js"></script>
+
 @endsection
 @section('send_message')
     <div class="send-message-form">
         @include('conversations.write')
     </div>
+@endsection
+
+@section('scripts')
+    <script src="/js/conversation-scrolled-bottom.js"></script>
 @endsection

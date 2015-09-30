@@ -94,3 +94,7 @@ Route::post('/post/{id}/downvote',[
 Route::controllers([
     'password' => 'Auth\PasswordController',
 ]);
+Route::post('/post/{id}/comments/add',[
+    'middleware' => 'auth',
+    'uses'       => 'CommentsController@store'
+]);

@@ -47,3 +47,34 @@ textarea{
 .alertModal{
     height: 100vh;
 }
+.post-container{
+    margin-bottom: 0;
+    margin-top: 15px;
+}
+.comments-wrapper{
+
+    border-radius: 5px;
+    width: 80%;
+    margin-left: 10%;
+}
+.comments-container{
+    max-height: 300px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+.comment{
+    min-height: 50px;
+    border-radius: 15px;
+    border: solid silver 1px;
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 5px;
+}
+.comment-container{
+    background-color: #0000C2;
+    height: 90%;
+}
+.comment-profile-picture{
+    text-align: right;
+    margin-top: 1.5px;
+}

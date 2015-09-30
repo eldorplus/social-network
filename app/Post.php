@@ -22,4 +22,13 @@ class Post extends Model
 
         return $vote;
     }
+    public function comments(){
+        return $this->hasMany('App\Comment');
+    }
+    public function newComment(){
+        $comment = new Comment;
+        $comment->post()->associate($this);
+
+        return $comment;
+    }
 }
