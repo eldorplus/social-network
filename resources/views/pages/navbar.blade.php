@@ -49,6 +49,7 @@
                                 <p class="body">{{ $notification->body }}</p>
                                     @if($notification->hasValidObject())
                                         <a href="/notifications/{{ $notification->id }}/received">View</a>
+                                        
                                     @endif
                                 </div>
                                </li>
