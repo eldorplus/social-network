@@ -3,8 +3,10 @@ $('#notificationsMarkViewed').click(function(e){
     console.log('dupa');
     var route = '/notifications/viewAll';
     $.post( route, function( data ) {
-        $('#notifications-li').children().each(function(){
-            console.log(this);
-        })
+        $('#notifications-li').find("div").removeClass("notification-unread");
+        $('#notifications-count').text(' ');
     });
 });
+//$('a.dropdown-toggle').on('click', function (event) {
+//    $(this).parent().toggleClass('open');
+//});

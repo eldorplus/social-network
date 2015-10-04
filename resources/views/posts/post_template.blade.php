@@ -5,7 +5,7 @@
         </a>
         @can('update-post',$post)
             <div class="btn-group" role="group" aria-label="..." style="float: right;">
-                <button type="button" class="btn btn-default btn-edit" data-token="{!! csrf_token() !!}"     data-method="/post/{!! $post->id !!}/edit" title="Edit" data-identification="{!! $post->id !!}">
+                <button type="button" class="btn btn-default btn-edit" data-method="/post/{!! $post->id !!}/edit" title="Edit" data-identification="{!! $post->id !!}" data-editing="false" id="{!! $post->id !!}-edit">
                     <span class="glyphicon glyphicon-edit"></span>
                 </button>
                 <button href="#" class="btn btn-default btn-delete"  data-method="/post/{!! $post->id !!}/destroy" data-toggle="modal" data-target="#alertModal" data-identification="{!! $post->id !!}">
@@ -15,7 +15,10 @@
         @endcan
     </div>
     <div class="panel-body">
-        <p>{!! $post->body !!}</p>
+        <p id="{!! $post->id !!}-content">{!! $post->body !!}</p>
+        <div class="row" id="{!! $post->id !!}-edit-controls" style="text-align: right; padding-right: 15px;">
+
+        </div>
     </div>
     <div class="panel-footer" style="width: 100%">
 

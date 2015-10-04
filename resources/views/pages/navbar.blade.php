@@ -41,9 +41,9 @@
                         </div>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            Notifications <span class="badge">
-                              {!! App\User::find(Auth::id())->notifications()->unread()->count() > 0 ? App\User::find(Auth::id())->notifications()->unread()->count()  : ''!!}
+                        <a href="#" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Notifications <span class="badge" id="notifications-count">
+                              {!! App\User::find(Auth::id())->notifications()->unread()->not_type('message')->count() > 0 ? App\User::find(Auth::id())->notifications()->unread()->count()  : ''!!}
                             </span>
                         </a>
                         <div class="dropdown-menu notifications-dropdown">
