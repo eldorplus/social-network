@@ -18,6 +18,8 @@ class CreateNotificationsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('sender_id')->unsigned();
+            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('type', 128)->nullable();
             $table->string('subject', 128)->nullable();
             $table->text('body')->nullable();

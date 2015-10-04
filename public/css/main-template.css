@@ -25,11 +25,22 @@ textarea{
     overflow:scroll;
 }
 .notifications-dropdown{
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.notifications-list{
     min-width: 250px;
     max-height:300px;
     overflow-y:auto;
     overflow-x:hidden;
+    padding-left: 0;
 }
+.notifications-footer{
+    height: 25px;
+    background-color: rgba(230,230,230,0.4);
+    text-align: center;
+}
+
 .panel-heading,.panel-footer{
     height: 35px;
     padding-top: 0;
@@ -77,4 +88,9 @@ textarea{
 .comment-profile-picture{
     text-align: right;
     margin-top: 1.5px;
+}
+.read-all{
+    margin-left: 10px;
+    margin-right: 10px;
+    float:right;
 }

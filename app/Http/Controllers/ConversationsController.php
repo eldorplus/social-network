@@ -67,8 +67,7 @@ class ConversationsController extends Controller
         }
 
             $user = User::find(Auth::id());
-            $unreadNotifications = $user->notifications()->unread()->get()->count();
-            $notifications = $user->notifications()->get();
+
 
             return view('conversations.conversations')->with([
                 "conversations" => $conversations,

@@ -30,12 +30,14 @@
         @yield('send_message')
     </div>
 
+    @include('pages.footer')
 
     <!-- Bootstrap core JavaScript
        ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/users-profile-buttons.js"></script>
+    <script src="/js/notifications.js"></script>
     <script type="text/javascript">
         $.ajaxSetup({
             headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }

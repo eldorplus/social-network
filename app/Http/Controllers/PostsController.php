@@ -10,6 +10,7 @@ use App\Post;
 use App\User;
 use App\Friend;
 use App\Vote;
+use App\Notification;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 
@@ -133,13 +134,12 @@ class PostsController extends Controller
             if($_downvote_handle){
                 $_downvote_handle->delete();
 
-                //TODO: add in notifications table column 'sender_id' to track down user responsible for notification
-                //TODO: delete previous notification from sender regarding current post upvote/downvote
-
-//                $_notification_handle = Notification::where('type','=','post')
-//                                                        ->where('object_id','=',$id)
-//                                                        ->where('user_id','=',$post->author_id)
-//                                                        ->first();
+                $_notification_handle = Notification::where('type','=','post')
+                                                        ->where('object_id','=',$id)
+                                                        ->where('sender_id','=',Auth::id())
+                                                        ->where('user_id','=',$post->author_id)
+                                                        ->first();
+                $_notification_handle->delete();
             }
             $post->newVote()
                 ->withType('upvote')
@@ -149,6 +149,7 @@ class PostsController extends Controller
             $post_author = User::find($post->author_id);
             $post_author->newNotification()
                 ->withType('post')
+                ->withSender($user->id)
                 ->withSubject($user->name.' '.$user->surname.' upvoted your post.')
                 ->withBody('"'.$post->body.'"')
                 ->regarding($post)
@@ -166,6 +167,12 @@ class PostsController extends Controller
             $_upvote_handle = Vote::where('object_id','=',Auth::id())->where('type','=','upvote')->where('post_id','=',$id)->first();
             if($_upvote_handle){
                 $_upvote_handle->delete();
+                $_notification_handle = Notification::where('type','=','post')
+                    ->where('object_id','=',$id)
+                    ->where('sender_id','=',Auth::id())
+                    ->where('user_id','=',$post->author_id)
+                    ->first();
+                $_notification_handle->delete();
             }
             $post->newVote()
                 ->withType('downvote')
@@ -175,6 +182,7 @@ class PostsController extends Controller
             $post_author = User::find($post->author_id);
             $post_author->newNotification()
                 ->withType('post')
+                ->withSender($user->id)
                 ->withSubject($user->name.' '.$user->surname.' downvoted your post.')
                 ->withBody('"'.$post->body.'"')
                 ->regarding($post)

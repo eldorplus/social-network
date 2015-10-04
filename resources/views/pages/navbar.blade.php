@@ -18,21 +18,27 @@
                                 {!! App\User::find(Auth::id())->notifications()->unread()->type('message')->count() or ''!!}
                             </span>
                         </a>
-                        <ul class="dropdown-menu notifications-dropdown">
-                            @foreach(Auth::user()->notifications()->type('message')->get()->reverse() as $notification)
-                                <li>
-                                    <div class="notification {{ $notification->type }} @if(!$notification->isRead()) notification-unread @endif">
-                                        <p class="subject">{!!  App\Conversation::find($notification->getObject()->id)->title !!}</p>
-                                        <p class="body">{{ $notification->body }}</p>
+                        <div class="dropdown-menu notifications-dropdown">
+                            <ul class="notifications-list">
+                                @foreach(Auth::user()->notifications()->type('message')->get()->reverse() as $notification)
+                                    <li id="messages-li">
+                                        <div class="notification {{ $notification->type }}-notification @if(!$notification->isRead()) notification-unread @endif">
+                                            <p class="subject">{!!  App\Conversation::find($notification->getObject()->id)->title !!}</p>
+                                            <p class="body">{{ $notification->body }}</p>
 
-                                        @if($notification->hasValidObject())
-                                            <a href="/notifications/{{ $notification->id }}/received">View</a>
-                                        @endif
-                                    </div>
-                                </li>
-                            @endforeach
-
-                        </ul>
+                                            @if($notification->hasValidObject())
+                                                <a href="/notifications/{{ $notification->id }}/received">View</a>
+                                            @endif
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                            <div class="notifications-footer">
+                                <a href="/messages">
+                                    See all
+                                </a>
+                            </div>
+                        </div>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -40,22 +46,26 @@
                               {!! App\User::find(Auth::id())->notifications()->unread()->count() > 0 ? App\User::find(Auth::id())->notifications()->unread()->count()  : ''!!}
                             </span>
                         </a>
-                        <ul class="dropdown-menu notifications-dropdown">
-
+                        <div class="dropdown-menu notifications-dropdown">
+                            <ul class="notifications-list">
                             @foreach(Auth::user()->notifications()->not_type('message')->get()->reverse() as $notification)
-                                <li>
-                                <div class="notification {{ $notification->type }} @if(!$notification->isRead()) notification-unread @endif">
+                                <li id="notifications-li">
+                                <div class="notification {{ $notification->type }}-notification @if(!$notification->isRead()) notification-unread @endif">
                                 <p class="subject">{{ $notification->subject }}</p>
                                 <p class="body">{{ $notification->body }}</p>
                                     @if($notification->hasValidObject())
                                         <a href="/notifications/{{ $notification->id }}/received">View</a>
-
                                     @endif
                                 </div>
                                </li>
                             @endforeach
-
-                        </ul>
+                            </ul>
+                            <div class="notifications-footer">
+                                <a href="#" id="notificationsMarkViewed">
+                                    Mark all as viewed
+                                </a>
+                            </div>
+                        </div>
                     </li>
                 @endif
 

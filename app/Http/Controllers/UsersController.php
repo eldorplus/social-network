@@ -95,6 +95,7 @@ class UsersController extends Controller
         $user = User::find($id);
         $user->newNotification()
             ->withType('friend_invite')
+            ->withSender($user->id)
             ->withSubject($user->name.' '.$user->surname.' invited you!')
             ->withBody('Go to her/his profile')
             ->regarding($user)

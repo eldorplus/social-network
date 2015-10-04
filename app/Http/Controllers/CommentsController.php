@@ -52,6 +52,7 @@ class CommentsController extends Controller
             if($post_author->id != $user->id){
                 $post_author->newNotification()
                     ->withType('comment')
+                    ->withSender($user->id)
                     ->withSubject($user->name.' '.$user->surname.' commented on your post!')
                     ->withBody('"'.$input['body'].'"')
                     ->regarding($post)

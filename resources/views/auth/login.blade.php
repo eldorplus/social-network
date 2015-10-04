@@ -40,16 +40,14 @@
                                 <div class="col-md-6 col-md-offset-5">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="remember"> Remember Me
+                                            {!! Form::checkbox('remember') !!} Remember Me
                                         </label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-md-4 col-md-offset-1">
-                                    <button type="submit" class="btn btn-primary" style="margin-right: 15px;">
-                                        Login
-                                    </button>
+                                <div class="col-md-4 col-md-offset-4">
+                                    {!! Form::submit('Login',['class'=>'btn btn-primary form-control']) !!}
                                 </div>
                             </div>
                        {!! Form::close() !!}

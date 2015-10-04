@@ -57,6 +57,7 @@ class MessagesController extends Controller
             $user = User::find($_user->user_id);
             $user->newNotification()
                 ->withType('message')
+                ->withSender(Auth::id())
                 ->withSubject($conversation->title)
                 ->withBody($input['body'])
                 ->regarding($conversation)

@@ -98,3 +98,7 @@ Route::post('/post/{id}/comments/add',[
     'middleware' => 'auth',
     'uses'       => 'CommentsController@store'
 ]);
+Route::post('/notifications/viewAll',[
+    'middleware' => 'auth',
+    'uses'       => 'NotificationsController@viewAll'
+]);

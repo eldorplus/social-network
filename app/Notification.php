@@ -9,7 +9,7 @@ class Notification extends Model
 {
     //
     protected $table = 'notifications';
-    protected $fillable = ['user_id','type','subject','body','object_id','object_type','is_read','send_at'];
+    protected $fillable = ['user_id','sender_id','type','subject','body','object_id','object_type','is_read','send_at'];
     private $relatedObject = null;
 
     public function getDates()
@@ -28,7 +28,11 @@ class Notification extends Model
 
         return $this;
     }
+    public function withSender($id){
+        $this->sender_id = $id;
 
+        return $this;
+    }
     public function withBody($body)
     {
         $this->body = $body;

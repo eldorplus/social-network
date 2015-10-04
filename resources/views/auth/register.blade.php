@@ -21,7 +21,7 @@
 
                         @endif
 
-                        {!! Form::open(["class"=>'form-horizontal','role'=>'form','method'=>'POST','url'=>'auth/register']) !!}
+                        {!! Form::open(['role'=>'form','method'=>'POST','url'=>'auth/register']) !!}
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                             <div class="form-group">

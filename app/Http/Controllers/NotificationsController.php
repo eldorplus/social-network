@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Notification;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 class NotificationsController extends Controller
 {
-    //
     public function received($id){
         $handle = Notification::find($id);
         $handle->is_read = 1;
@@ -29,6 +29,15 @@ class NotificationsController extends Controller
             default:
                 print_r($handle->type);
                 break;
+        }
+    }
+    public function viewAll(){
+        if(Request::ajax()){
+            $notifications = Auth::user()->notifications()->not_type('message')->get();
+            foreach($notifications as $notification){
+                $notification->is_read = 1;
+                $notification->save();
+            }
         }
     }
 }
